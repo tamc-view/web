@@ -61,8 +61,8 @@ export default {
   methods: {
     async fetchHQLatestImages() {
       try {
-        const HQimageUrl = await axios.get("http://100.119.204.18:5000/HQ_latest_img", { responseType: 'blob' });
-        const response_Hosizora = await axios.get("http://100.119.204.18:5000/Hosizora_img", { responseType: 'blob' });
+        const HQimageUrl = await axios.get("https://toms-server.tail2925.ts.net/HQ_latest_img", { responseType: 'blob' });
+        const response_Hosizora = await axios.get("https://toms-server.tail2925.ts.net/Hosizora_img", { responseType: 'blob' });
         
         this.HQlatestImage = URL.createObjectURL(HQimageUrl.data);
         this.HosizoralatestImage = URL.createObjectURL(response_Hosizora.data);
@@ -72,8 +72,8 @@ export default {
     },
     async fetchHQInfo() {
       try {
-        const response_HQ = await axios.get("http://100.119.204.18:5000/HQ_info");
-        const response_Hosizora_time = await axios.get("http://100.119.204.18:5000/Hosizora_info");
+        const response_HQ = await axios.get("https://toms-server.tail2925.ts.net/HQ_info");
+        const response_Hosizora_time = await axios.get("https://toms-server.tail2925.ts.net/Hosizora_info");
 
         this.HQlatestTime = response_HQ.data;
         this.HosizoraTime = response_Hosizora_time.data;

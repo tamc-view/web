@@ -62,10 +62,10 @@ export default {
   methods: {
     async fetchSunInfos() {
       try {
-        const response = await axios.get("http://100.119.204.18:5000/manualReport/sunspot/info");
+        const response = await axios.get("https://toms-server.tail2925.ts.net/manualReport/sunspot/info");
         this.latestSunInfo = response.data;
-        this.latestSunImage = `http://100.119.204.18:5000${response.data.image_url}`;
-        this.contourSunImage = `http://100.119.204.18:5000${response.data.contour_image_url}`;
+        this.latestSunImage = `https://toms-server.tail2925.ts.net${response.data.image_url}`;
+        this.contourSunImage = `https://toms-server.tail2925.ts.net${response.data.contour_image_url}`;
       } catch (error) {
         console.error("Error fetching latest sunspot data:", error);
       }
@@ -133,9 +133,9 @@ export default {
     },
     async sunspotChart() {
       try {
-        const sunspots = await axios.get("http://100.119.204.18:5000/manualReport/sunspot/list");
-        const dateList = await axios.get("http://100.119.204.18:5000/manualReport/sunspot/datelist");
-        const temps = await axios.get("http://100.119.204.18:5000/thesedays/avgTemp");
+        const sunspots = await axios.get("https://toms-server.tail2925.ts.net/manualReport/sunspot/list");
+        const dateList = await axios.get("https://toms-server.tail2925.ts.net/manualReport/sunspot/datelist");
+        const temps = await axios.get("https://toms-server.tail2925.ts.net/thesedays/avgTemp");
         this.sunspot_count = sunspots.data;
         this.sunspotDates = dateList.data;
         this.temp_datas = temps.data;

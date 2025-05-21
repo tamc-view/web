@@ -128,9 +128,9 @@ export default {
   methods: {
     async fetchMeteorLatestImages() {
       try {
-        const MeteorimageUrl1 = "http://100.119.204.18:5000/Meteor_latest_video";
-        const MeteorimageUrl2 = "http://100.119.204.18:5000/Meteor_latest2_video";
-        const MeteorimageUrl3 = "http://100.119.204.18:5000/Meteor_latest3_video";
+        const MeteorimageUrl1 = "https://toms-server.tail2925.ts.net/Meteor_latest_video";
+        const MeteorimageUrl2 = "https://toms-server.tail2925.ts.net/Meteor_latest2_video";
+        const MeteorimageUrl3 = "https://toms-server.tail2925.ts.net/Meteor_latest3_video";
         this.MeteorlatestImages = [MeteorimageUrl1, MeteorimageUrl2, MeteorimageUrl3];
       } catch (error) {
         console.error("Error fetching meteor images:", error);
@@ -138,7 +138,7 @@ export default {
     },
     async fetchMeteorinfo() {
       try {
-        const response_video = await axios.get("http://100.119.204.18:5000/Meteor_info");
+        const response_video = await axios.get("https://toms-server.tail2925.ts.net/Meteor_info");
         this.meteor_logs = response_video.data;
       } catch (error) {
         console.error("Error fetching meteor info:", error);

@@ -122,7 +122,7 @@ export default {
       basicInfos: {title: "基本情報", time: "", cpuTemp: "", usbUsage: "", sdUsage: "", temp: "", humis: "", operating: ""},
       usages: {title: "使用率", path: "/", path: "/mnt/usb1", sdUsage: "", usbUsage: ""},
       usaging: {title: "使用状況"},
-      endpoint: "http://100.119.204.18:5000/1go/usages",
+      endpoint: "https://toms-server.tail2925.ts.net/1go/usages",
       lineColors: {
         temperature: 'rgba(255, 99, 132, 1)',
         cpuTemperature: 'rgba(255, 165, 38, 1)'
@@ -135,7 +135,7 @@ export default {
   methods: {
     async fetchLogs() {
       try {
-        const response = await axios.get("http://100.119.204.18:5000/1go/logs");
+        const response = await axios.get("https://toms-server.tail2925.ts.net/1go/logs");
         const logs = response.data;
 
         this.notifyErrorLog = logs["notify-error.log"];
@@ -148,7 +148,7 @@ export default {
     },
     async fetchStatus(){
       try {
-        const infos = await axios.get("http://100.119.204.18:5000/1go/info");
+        const infos = await axios.get("https://toms-server.tail2925.ts.net/1go/info");
 
         this.basicInfos.time = infos.data.date;
         this.basicInfos.temp = infos.data.temperature;

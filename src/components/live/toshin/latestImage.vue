@@ -60,9 +60,9 @@ export default {
     methods: {
         async fetchlatestMedias() {
             try {
-                const visTree1 = await axios.get("http://100.119.204.18:5000/latest_image", { responseType: 'blob' });
-                const visTree2 = await axios.get("http://100.119.204.18:5000/10minago_image", { responseType: 'blob' });
-                const visTree3 = await axios.get("http://100.119.204.18:5000/20minago_image", { responseType: 'blob' });
+                const visTree1 = await axios.get("https://toms-server.tail2925.ts.net/latest_image", { responseType: 'blob' });
+                const visTree2 = await axios.get("https://toms-server.tail2925.ts.net/10minago_image", { responseType: 'blob' });
+                const visTree3 = await axios.get("https://toms-server.tail2925.ts.net/20minago_image", { responseType: 'blob' });
                 // 古い Blob URL を解放
                 this.latestMedias.forEach(url => URL.revokeObjectURL(url));
 
@@ -81,9 +81,9 @@ export default {
         },
         async fetchlatestResults() {
             try {
-                const latest_class = await axios.get("http://100.119.204.18:5000/latest_class");
-                const tenmin_class = await axios.get("http://100.119.204.18:5000/10minago_class");
-                const twemin_class = await axios.get("http://100.119.204.18:5000/20minago_class");
+                const latest_class = await axios.get("https://toms-server.tail2925.ts.net/latest_class");
+                const tenmin_class = await axios.get("https://toms-server.tail2925.ts.net/10minago_class");
+                const twemin_class = await axios.get("https://toms-server.tail2925.ts.net/20minago_class");
                 const visTreeRes1 = latest_class.data[0];
                 const visTreeRes2 = tenmin_class.data[0];
                 const visTreeRes3 = twemin_class.data[0];
@@ -94,9 +94,9 @@ export default {
         },
         async fetchObservedTime() {
             try {
-                const latest_time = await axios.get("http://100.119.204.18:5000/latest_info");
-                const tenmin_time = await axios.get("http://100.119.204.18:5000/10minago_info");
-                const twemin_time = await axios.get("http://100.119.204.18:5000/20minago_info");
+                const latest_time = await axios.get("https://toms-server.tail2925.ts.net/latest_info");
+                const tenmin_time = await axios.get("https://toms-server.tail2925.ts.net/10minago_info");
+                const twemin_time = await axios.get("https://toms-server.tail2925.ts.net/20minago_info");
 
                 const visTreeTime1 = latest_time.data.time;
                 const visTreeTime2 = tenmin_time.data.time;

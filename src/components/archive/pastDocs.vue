@@ -220,7 +220,7 @@
         this.isUpdating = true;
 
         try {
-          const response = await axios.get(`http://100.119.204.18:5000/folderID/${this.name}/${this.title}/${this.month}`);
+          const response = await axios.get(`https://toms-server.tail2925.ts.net/folderID/${this.name}/${this.title}/${this.month}`);
           
           const filesArray = response.data.files;
 

@@ -28,8 +28,8 @@ export default {
     endpoints: {
       type: Array,
       default: () => [
-        "http://100.119.204.18:5000/Meteor_toyokawa_count",
-        "http://100.119.204.18:5000/Meteor_otsu_count",
+        "https://toms-server.tail2925.ts.net/Meteor_toyokawa_count",
+        "https://toms-server.tail2925.ts.net/Meteor_otsu_count",
       ],
     },
   },

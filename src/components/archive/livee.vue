@@ -198,8 +198,8 @@ export default defineComponent({
 
       const { formattedStartDate, formattedEndDate } = format(date.value);
 
-      const apiUrl = `http://100.119.204.18:5000/pastdata/${selectedDataType1.value}/${formattedStartDate}/${formattedEndDate}`;
-      const apiUrl2 = `http://100.119.204.18:5000/pastdata/${selectedDataType2.value}/${formattedStartDate}/${formattedEndDate}`;
+      const apiUrl = `https://toms-server.tail2925.ts.net/pastdata/${selectedDataType1.value}/${formattedStartDate}/${formattedEndDate}`;
+      const apiUrl2 = `https://toms-server.tail2925.ts.net/pastdata/${selectedDataType2.value}/${formattedStartDate}/${formattedEndDate}`;
 
       try {
         const response = await axios.get(apiUrl);
@@ -247,7 +247,7 @@ export default defineComponent({
 
     const downloadCSV = async () => {
       const { formattedStartDate, formattedEndDate } = format(date.value);
-      const url = `http://100.119.204.18:5000/pastdata/${selectedDataType1.value}/${selectedDataType2.value}/${formattedStartDate}/${formattedEndDate}`;
+      const url = `https://toms-server.tail2925.ts.net/pastdata/${selectedDataType1.value}/${selectedDataType2.value}/${formattedStartDate}/${formattedEndDate}`;
   
       try {
         const response = await axios.get(url, { responseType: 'blob' });
