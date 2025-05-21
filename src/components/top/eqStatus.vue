@@ -162,7 +162,7 @@ export default {
   methods: {
     async fetchLogs() {
       try {
-        const response = await axios.get("http://100.119.204.18:5000/1go/logs");
+        const response = await axios.get("https://toms-server.tail2925.ts.net/1go/logs");
         const logs = response.data;
 
         this.notifyErrorLog = logs["notify-error.log"];
@@ -175,9 +175,9 @@ export default {
     },
     async fetchStatus(){
       try {
-        const firstInfo = await axios.get("http://100.119.204.18:5000/1go/info");
-        const secondInfo = await axios.get("http://100.119.204.18:5000/2go/info");
-        const thirdInfo = await axios.get("http://100.119.204.18:5000/3go/info");
+        const firstInfo = await axios.get("https://toms-server.tail2925.ts.net/1go/info");
+        const secondInfo = await axios.get("https://toms-server.tail2925.ts.net/2go/info");
+        const thirdInfo = await axios.get("https://toms-server.tail2925.ts.net/3go/info");
 
         const firstusbUsage = firstInfo.data.usbUsage;
         const secondusbUage = secondInfo.data.usbUsage;

@@ -71,9 +71,9 @@ export default {
     methods: {
         async fetchlatestMedias() {
             try {
-                const visTree = await axios.get("http://100.119.204.18:5000/latest_image", { responseType: 'blob' });
-                const visFuji = await axios.get("http://100.119.204.18:5000/Fuji_latest_image", { responseType: 'blob' });
-                const metVideo = "http://100.119.204.18:5000/Meteor_latest_video";
+                const visTree = await axios.get("https://toms-server.tail2925.ts.net/latest_image", { responseType: 'blob' });
+                const visFuji = await axios.get("https://toms-server.tail2925.ts.net/Fuji_latest_image", { responseType: 'blob' });
+                const metVideo = "https://toms-server.tail2925.ts.net/Meteor_latest_video";
                 // 古い Blob URL を解放
                 this.latestMedias.forEach(url => URL.revokeObjectURL(url));
 
@@ -91,9 +91,9 @@ export default {
         },
         async fetchlatestResults() {
             try {
-                const latest_class = await axios.get("http://100.119.204.18:5000/latest_class");
-                const Fujilatest_class = await axios.get("http://100.119.204.18:5000/Fuji_latest_class");
-                const meteor_dir = await axios.get("http://100.119.204.18:5000/Meteor_info");
+                const latest_class = await axios.get("https://toms-server.tail2925.ts.net/latest_class");
+                const Fujilatest_class = await axios.get("https://toms-server.tail2925.ts.net/Fuji_latest_class");
+                const meteor_dir = await axios.get("https://toms-server.tail2925.ts.net/Meteor_info");
                 const visTreeRes = latest_class.data[0];
                 // const visFujiRes = Fujilatest_class.data[0];
                 const meteorRes = meteor_dir.data[0];
@@ -104,9 +104,9 @@ export default {
         },
         async fetchObservedTime() {
             try {
-                const latest_time = await axios.get("http://100.119.204.18:5000/latest_info");
-                const Fujilatest_time = await axios.get("http://100.119.204.18:5000/Fuji_latest_info");
-                const meteor_time = await axios.get("http://100.119.204.18:5000/Meteor_info");
+                const latest_time = await axios.get("https://toms-server.tail2925.ts.net/latest_info");
+                const Fujilatest_time = await axios.get("https://toms-server.tail2925.ts.net/Fuji_latest_info");
+                const meteor_time = await axios.get("https://toms-server.tail2925.ts.net/Meteor_info");
 
                 const visTreeTime = latest_time.data.time;
                 const visFujiTime = Fujilatest_time.data.time;

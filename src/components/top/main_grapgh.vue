@@ -34,9 +34,9 @@ export default {
     endpoints: {
       type: Array,
       default: () => [
-        "http://100.119.204.18:5000/latest/temper",
-        "http://100.119.204.18:5000/latest/humidity",
-        "http://100.119.204.18:5000/latest/pressure"
+        "https://toms-server.tail2925.ts.net/latest/temper",
+        "https://toms-server.tail2925.ts.net/latest/humidity",
+        "https://toms-server.tail2925.ts.net/latest/pressure"
       ]
     }
   },

@@ -26,7 +26,7 @@ export default {
     endpoints: {
       type: Array,
       default: () => [
-        "http://100.119.204.18:5000/Meteor_count",
+        "https://toms-server.tail2925.ts.net/Meteor_count",
       ]
     }
   },
