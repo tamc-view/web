@@ -80,9 +80,11 @@ return {
     { 
       title: 'アーカイブデータ', 
       subs: [
+        { title: "自動観測画像", path: "/observe-image"},
         { title: "Live E!", path: "/liveE" },
         { title: "気象観測記録", path: "/pastDocs" },
-        { title: "黒点観測記録(未実装)", path: "#" }
+        { title: "黒点観測記録(未実装)", path: "#" },
+        { title: "過去撮影画像", path: "/pastImages" },
       ]
     },
     { 
