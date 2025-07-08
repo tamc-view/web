@@ -145,7 +145,7 @@
         // search_year: Array.from({length: c_year - init_year + 1}, (_, i) => String(i + init_year)),
         search_month: Array.from({length: 12}, (_, i) => String(i + 1).padStart(2, '0')),
         search_day: Array.from({length: 31}, (_, i) => String(i + 1).padStart(2, '0')),
-        search_hour: Array.from({length: 17}, (_, i) => String(i + 4).padStart(2, '0')),
+        search_hour: Array.from({length: 16}, (_, i) => String(i + 4).padStart(2, '0')),
         default_type: '画像種類',
         default_year: '選択年',
         default_month: '選択月',

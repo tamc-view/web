@@ -6,68 +6,10 @@
   </v-container>
   <v-row class="cross-layout">
     <v-col>
-      <!-- Zenith Camera -->
       <v-col cols="12" md="4" class="cross-item center">
-        <div class="text-h6 mb-2">天頂</div>
         <div class="iframe-wrapper">
           <iframe
-            :src="'http://atomcam1.local/webrtc.html'"
-            frameborder="0"
-            scrolling="no"
-            allowfullscreen
-            class="camera-frame"
-          ></iframe>
-        </div>
-      </v-col>
-
-      <!-- South Camera -->
-      <v-col cols="12" md="4" class="cross-item bottom">
-        <div class="text-h6 mb-2">南</div>
-        <div class="iframe-wrapper">
-          <iframe
-            :src="'http://atomcam2.local/webrtc.html'"
-            frameborder="0"
-            scrolling="no"
-            allowfullscreen
-            class="camera-frame"
-          ></iframe>
-        </div>
-      </v-col>
-
-      <!-- West Camera -->
-      <v-col cols="12" md="4" class="cross-item left">
-        <div class="text-h6 mb-2">西</div>
-        <div class="iframe-wrapper">
-          <iframe
-            :src="'http://atomcam3.local/webrtc.html'"
-            frameborder="0"
-            scrolling="no"
-            allowfullscreen
-            class="camera-frame"
-          ></iframe>
-        </div>
-      </v-col>
-
-      <!-- North Camera -->
-      <v-col cols="12" md="4" class="cross-item top">
-        <div class="text-h6 mb-2">北</div>
-        <div class="iframe-wrapper">
-          <iframe
-            :src="'http://atomcam4.local/webrtc.html'"
-            frameborder="0"
-            scrolling="no"
-            allowfullscreen
-            class="camera-frame"
-          ></iframe>
-        </div>
-      </v-col>
-
-      <!-- East Camera -->
-      <v-col cols="12" md="4" class="cross-item right">
-        <div class="text-h6 mb-2">東</div>
-        <div class="iframe-wrapper">
-          <iframe
-            :src="'http://atomcam5.local/webrtc.html'"
+            :src="'https://youtube.com/embed/PALTYGP3Ivs?autoplay=1'"
             frameborder="0"
             scrolling="no"
             allowfullscreen
@@ -192,13 +134,14 @@ export default {
   flex-direction: column;
   align-items: center;
   position: relative;
-  height: 120vh;
-  overflow: hidden;
+  height: 70vh;
+  overflow: visible;
 }
 
 .cross-item {
   position: absolute;
-  width: 40vw;
+  width: 80vw;
+  max-width: 1200px;
   aspect-ratio: 16 / 9;
 }
 
@@ -234,8 +177,8 @@ export default {
 
 .iframe-wrapper {
   overflow: hidden;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   position: relative;
 }
 

@@ -33,7 +33,7 @@
   <v-app-bar color="grey-darken-3" height="50">
     <v-spacer></v-spacer>
     <v-tabs align-tabs="center" grow hide-slider >
-      <v-menu v-for="data in head_datas" :key="data.title" open-on-hover>
+      <v-menu v-for="data in head_datas" :key="data.title">
         <template v-slot:activator="{ props }">
           <v-tab v-bind="props" class="font-weight-bold"  @click="navigateToIndex(data)">
             {{ data.title }}
