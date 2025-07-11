@@ -103,25 +103,32 @@
 
     <v-container fluid v-if="count" class="mx-auto" max-height="1200">
       <v-row dense>
-        <v-col v-for="info in infos" :key="info.name" cols="4" md="3">
+        <v-col v-for="info in infos" :key="info.name" cols="4" md="4">
           <v-card>
-            <iframe
+            <!-- <iframe
               :src="baseUrl + info.src"
               width="100%"
               height="480"
               allow="autodisplay"
-            ></iframe>
+            ></iframe> -->
+            <!-- <img
+              :src="baseUrl + info.src"
+              width="100%"
+              height="480"
+              style="object-fit: cover;"
+              :alt="info.name"
+            /> -->
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <!-- <v-btn
-                size="small"
-                color="surface-variant"
-                variant="text"
-                icon="mdi-bookmark"
-              ></v-btn> -->
-            </v-card-actions>
+            <v-img
+              :src='baseUrl + info.src'
+              aspect-ratio="1.5"
+              cover
+              class="image-name"
+            >
+              <div class="imageName">
+                <span>{{ info.name }}</span>
+              </div>
+            </v-img>
           </v-card>
         </v-col>
       </v-row>
@@ -138,7 +145,8 @@
         autoUpdate: true,
         isUpdating: false,
         title: '自作自動観測装置の観測画像',
-        types: ['壱号機(スカイツリー方面)', '参号機(富士山方面)', '並べたまとめ画像'],
+        types: ['壱号機(スカイツリー方面)', '参号機(富士山方面)', 'まとめ画像(スカイツリー方面)'],
+        baseUrl: 'https://toms-server.tail2925.ts.net',
         init_year: 2018,
         c_year: new Date().getFullYear(),
         search_year: [],   // c_yearを使うがdata()では他を参照できないのでcreated()で。
@@ -153,7 +161,7 @@
         default_hour: '選択時間',
         infos: [],
         timeout: null,
-        count: null
+        count: 0
       };
     },
 
@@ -168,15 +176,23 @@
         this.infos = [];
 
         try {
+
           const params = {
             type: this.default_type,
             Y: this.default_year,
-            m: this.default_month,
-            d: this.default_day,
-            H: this.default_hour
           };
 
-          const response = await axios.get('https://toms-server.tail2925.ts.net/searchImages', {params});
+          if(this.default_month !== '選択月'){
+            params.m = this.default_month;
+          }
+          if(this.default_day !== '選択日'){
+            params.d = this.default_day;
+          }
+          if(this.default_hour !== '選択時間'){
+            params.H = this.default_hour;
+          }
+
+          const response = await axios.get('https://toms-server.tail2925.ts.net/searchImages/', {params});
           const data = response.data;
 
           this.infos = (data.urls || []).map((url, i) => ({
@@ -185,7 +201,7 @@
             description: data.description?.[i] || '',
           }));
 
-          this.count = this.infos.urls.length > 0;
+          this.count = this.infos.length > 0;
         } catch (error) {
           console.error('データの取得に失敗しました:', error);
         } finally {
