@@ -1,10 +1,5 @@
 <template>
-  <!-- <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-    <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
-      自作自動観測装置の観測画像
-    </div>
-  </v-container> -->
-  <v-container fluid clas="content-conrainer">
+  <v-container fluid class="content-container">
     <v-card :loading="isUpdating" class="mx-auto content-card">
 
       <template v-slot:loader="{ isActive }">
@@ -27,7 +22,7 @@
         <v-row>
           <v-col class="text-center">
             <h3 class="text-h5">{{ title }}</h3>
-            <span class="text-grey-lighten-1">{{ default_type }} / {{ default_year }} / {{ default_month}} / {{ default_day}} / {{ default_hour}}</span>
+            <span class="text-grey-lighten-1">{{ selectData.type }} / {{ selectData.year }} / {{ selectData.month}} / {{ selectData.day}} / {{ selectData.hour}}</span>
           </v-col>
         </v-row>
       </v-row>
@@ -37,27 +32,33 @@
           <v-row dense>
             <v-col cols="12" md="12">
               <v-select
-                v-model="default_type"
+                v-model="selectData.type"
                 :items="types"
                 :disabled="isUpdating"
+                :error-messages="v$.type.$error ? ['データタイプを選択してください'] : []"
                 color="blue-grey-lighten-2"
                 label="data type"
+                placeholder="画像種類を選択"
+                required
               ></v-select>
             </v-col>
 
             <v-col cols="12" md="6">
               <v-select
-                v-model="default_year"
+                v-model="selectData.year"
                 :items="search_year"
                 :disabled="isUpdating"
+                :error-messages="v$.year.$error ? ['年を選択してください'] : []"
                 color="blue-grey-lighten-2"
                 label="data year"
+                placeholder="年を選択"
+                required
               ></v-select>
             </v-col>
 
             <v-col cols="12" md="6">
               <v-select
-                v-model="default_month"
+                v-model="selectData.month"
                 :items="search_month"
                 :disabled="isUpdating"
                 color="blue-grey-lighten-2"
@@ -67,7 +68,7 @@
 
             <v-col cols="12" md="6">
               <v-select
-                v-model="default_day"
+                v-model="selectData.day"
                 :items="search_day"
                 :disabled="isUpdating"
                 color="blue-grey-lighten-2"
@@ -77,7 +78,7 @@
 
             <v-col cols="12" md="6">
               <v-select
-                v-model="default_hour"
+                v-model="selectData.hour"
                 :items="search_hour"
                 :disabled="isUpdating"
                 color="blue-grey-lighten-2"
@@ -100,25 +101,10 @@
       </v-card-actions>
     </v-card>
 
-
     <v-container fluid v-if="count" class="mx-auto" max-height="1200">
       <v-row dense>
         <v-col v-for="info in infos" :key="info.name" cols="4" md="4">
           <v-card>
-            <!-- <iframe
-              :src="baseUrl + info.src"
-              width="100%"
-              height="480"
-              allow="autodisplay"
-            ></iframe> -->
-            <!-- <img
-              :src="baseUrl + info.src"
-              width="100%"
-              height="480"
-              style="object-fit: cover;"
-              :alt="info.name"
-            /> -->
-
             <v-img
               :src='baseUrl + info.src'
               aspect-ratio="1.5"
@@ -137,77 +123,125 @@
 </template>
 
 <script>
-  import axios from 'axios';
+import { reactive, ref, computed, onMounted } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import axios from 'axios';
 
-  export default {
-    data() {
-      return {
-        autoUpdate: true,
-        isUpdating: false,
-        title: '自作自動観測装置の観測画像',
-        types: ['壱号機(スカイツリー方面)', '参号機(富士山方面)', 'まとめ画像(スカイツリー方面)'],
-        baseUrl: 'https://toms-server.tail2925.ts.net',
-        init_year: 2018,
-        c_year: new Date().getFullYear(),
-        search_year: [],   // c_yearを使うがdata()では他を参照できないのでcreated()で。
-        // search_year: Array.from({length: c_year - init_year + 1}, (_, i) => String(i + init_year)),
-        search_month: Array.from({length: 12}, (_, i) => String(i + 1).padStart(2, '0')),
-        search_day: Array.from({length: 31}, (_, i) => String(i + 1).padStart(2, '0')),
-        search_hour: Array.from({length: 16}, (_, i) => String(i + 4).padStart(2, '0')),
-        default_type: '画像種類',
-        default_year: '選択年',
-        default_month: '選択月',
-        default_day: '選択日',
-        default_hour: '選択時間',
-        infos: [],
-        timeout: null,
-        count: 0
-      };
-    },
+export default {
+  setup() {
+    const isUpdating = ref(false);
+    const title = ref('自作自動観測装置の観測画像');
+    const types = ref(['壱号機(スカイツリー方面)', '参号機(富士山方面)', 'まとめ画像(スカイツリー方面)']);
+    const baseUrl = ref('https://toms-server.tail2925.ts.net');
+    const infos = ref([]);
+    const count = ref(0);
+    
+    const init_year = 2018;
+    const c_year = new Date().getFullYear();
+    
+    const selectData = reactive({
+      type: '画像種類',
+      year: '観測年',
+      month: '観測月',
+      day: '観測日',
+      hour: '観測時間'
+    });
 
-    created() {
-      this.search_year = Array.from({ length: this.c_year -this.init_year + 1}, (_, i) => String(this.init_year + i))
-    },
-
-    methods: {
-      async searchImages() {
-        this.isUpdating = true;
-        this.count = null;
-        this.infos = [];
-
-        try {
-
-          const params = {
-            type: this.default_type,
-            Y: this.default_year,
-          };
-
-          if(this.default_month !== '選択月'){
-            params.m = this.default_month;
-          }
-          if(this.default_day !== '選択日'){
-            params.d = this.default_day;
-          }
-          if(this.default_hour !== '選択時間'){
-            params.H = this.default_hour;
-          }
-
-          const response = await axios.get('https://toms-server.tail2925.ts.net/searchImages/', {params});
-          const data = response.data;
-
-          this.infos = (data.urls || []).map((url, i) => ({
-            src: url,
-            name: data.name?.[i] || '',
-            description: data.description?.[i] || '',
-          }));
-
-          this.count = this.infos.length > 0;
-        } catch (error) {
-          console.error('データの取得に失敗しました:', error);
-        } finally {
-          this.isUpdating = false;
-        }
+    const rules = {
+      type: { 
+        required: (value) => value !== null && value !== '' && value !== '画像種類'
+      },
+      year: { 
+        required: (value) => value !== null && value !== '' && value !== '観測年'
       }
-    }
+    };
+
+    const v$ = useVuelidate(rules, selectData);
+
+    const search_year = computed(() => 
+      Array.from({ length: c_year - init_year + 1}, (_, i) => String(init_year + i))
+    );
+    const search_month = computed(() => 
+      Array.from({length: 12}, (_, i) => String(i + 1).padStart(2, '0'))
+    );
+    const search_day = computed(() => 
+      Array.from({length: 31}, (_, i) => String(i + 1).padStart(2, '0'))
+    );
+    const search_hour = computed(() => 
+      Array.from({length: 16}, (_, i) => String(i + 4).padStart(2, '0'))
+    );
+
+    const searchImages = async () => {
+      await v$.value.$validate();    // バリデーションチェック
+      
+      if (v$.value.$error) {
+        console.log('バリデーションエラー');
+        return; //やり直し
+      }
+
+      isUpdating.value = true;
+      count.value = 0;
+      infos.value = [];
+
+      try {
+        const params = {
+          type: selectData.type,
+          Y: selectData.year,
+        };
+
+        if (selectData.month !== '観測月') {
+          params.m = selectData.month;
+        }
+        if (selectData.day !== '観測日') {
+          params.d = selectData.day;
+        }
+        if (selectData.hour !== '観測時間') {
+          params.H = selectData.hour;
+        }
+
+        const response = await axios.get('https://toms-server.tail2925.ts.net/searchImages/', { params });
+        const data = response.data;
+
+        infos.value = (data.urls || []).map((url, i) => ({
+          src: url,
+          name: data.name?.[i] || '',
+          description: data.description?.[i] || '',
+        }));
+
+        count.value = infos.value.length > 0;
+      } catch (error) {
+        console.error('データの取得に失敗しました:', error);
+      } finally {
+        isUpdating.value = false;
+      }
+    };
+
+    // const resetSelect = () => {
+    //   v$.value.$reset();
+    //   selectData.type = null;
+    //   selectData.year = null;
+    //   selectData.month = '選択月';
+    //   selectData.day = '選択日';
+    //   selectData.hour = '選択時間';
+    // };
+
+    return {
+      isUpdating,
+      title,
+      types,
+      baseUrl,
+      infos,
+      count,
+      selectData,
+      v$,
+      search_year,
+      search_month,
+      search_day,
+      search_hour,
+      searchImages,
+      // resetSelect
+    };
   }
+};
 </script>
