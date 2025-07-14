@@ -159,7 +159,5 @@ export default {
 
 .bar-chart {
   width: 100%;
-  height: 15vw;
-  max-height: 15vw;
 }
 </style>
