@@ -16,7 +16,7 @@
                         ></v-img>
                         <v-card-title class="flex-column align-start white-text" style="height: auto; display: block;">
                             <div class="text-h4 mb-2" style="white-space: pre-line;">視程距離: {{ visDis[latestResult[index]] }}</div>
-                            <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
+                            <div class="text-h5 font-weight-regular white-text mb-2" style="white-space: pre-line;">
                                 {{ observedTimes[index] }}
                             </div>
                             <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
@@ -38,7 +38,6 @@ export default {
     data() {
         return {
             latestMedias: [],
-            realtimeDataType: ["視程距離", "富士山", "流星"],
             visDis: {0:"0~0.1km", 1: "0.45km", 2: "0.75km", 3: "1.0km", 4: "3.0km", 5: "4.3km", 6: "4.9km", 7:"13km", 8: "25km", 9: "36km~"},
             latestResult: [],
             observedTimes: [],

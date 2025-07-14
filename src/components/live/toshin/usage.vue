@@ -98,7 +98,7 @@
   
 <script>
 import axios from 'axios';
-import { Chart, LinearScale, CategoryScale, Title, Tooltip, Legend, LineElement, LineController, PointElement } from 'chart.js';
+import { Chart, LinearScale, CategoryScale, Title, Tooltip, Legend, LineElement, LineController, PointElement, plugins } from 'chart.js';
 Chart.register(LinearScale, CategoryScale, Title, Tooltip, Legend, LineElement, LineController, PointElement);
 
 
@@ -204,6 +204,8 @@ export default {
         }
         Chart.getChart(canvas)?.destroy();
 
+        const mobileScreen = window.innerWidth <= 450;
+
         const chartData = {
             labels: labels,
             datasets: [
@@ -223,12 +225,32 @@ export default {
         };
 
         const options = {
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
             responsive: true,
+            aspectRatio: mobileScreen ? 5/2 : 5/1,
+            plugins: {
+                legend: {
+                    display: !mobileScreen
+                }
+            },
             scales: {
                 y: {
                     min: this.yMinValue,
-                    max: this.yMaxValue
+                    max: this.yMaxValue,
+                    beginAtZero: false,
+                    font: {
+                        size: mobileScreen ? 10 : 12
+                    }
+                },
+                x: {
+                    ticks: {
+                        display: true,
+                        maxTicksLimit: mobileScreen ? 8 : 12, // 450以下の時8つまでx軸表示
+                        Rotation: 0,
+                        font: {
+                            size: mobileScreen ? 10 : 12
+                        }
+                    }
                 }
             }
         };
@@ -276,8 +298,6 @@ export default {
 
 .line-chart {
     width: 100%;
-    height: 15vw;
-    max-height: 15vw;
   }
 </style>
   

@@ -44,9 +44,18 @@
                     <v-col v-for="(media, index) in astronomyData.medias" :key="`astro-${index}`" cols="12" sm="6" md="6" lg="6">
                         <v-card class="black-card" height="100%">
                             <v-img
+                            v-if="astronomyData.types[index] === '流星'"
                             :src="media"
                             cover
                             :aspect-ratio="3/2"
+                            ></v-img>
+
+                            <v-img
+                            v-else-if="astronomyData.types[index] === '黒点'"
+                            :src="media"
+                            contain
+                            :aspect-ratio="3/2"
+                            class="sunspot-image"
                             ></v-img>
                             <v-card-title class="flex-column align-start white-text" style="height: auto; display: block;">
                                 <!-- 流星の場合 -->
@@ -66,7 +75,7 @@
                                         黒点面積： {{ astronomyData.results[index] }} pixel
                                     </div>
                                     <div class="text-h5 font-weight-regular white-text mb-2" style="white-space: pre-line;">
-                                        観測日: {{ astronomyData.times[index] }}
+                                        {{ astronomyData.times[index] }}
                                     </div>
                                 </template>
                                 <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
@@ -107,7 +116,7 @@ export default {
                 times: [],
                 explanations: [
                     "流星とは流れ星のことであり、流星の観測は宇宙空間の彗星・小惑星の姿や高層の地球大気を解明することに繋がる。",
-                    "黒点は太陽表面の暗い部分で、太陽活動の指標となる。",
+                    "黒点は周囲より温度が低く暗く見える太陽表面の領域で、太陽活動の強さを示す手がかりとなる。",
                 ]
             },
             visDis: {0:"0~0.1km", 1: "0.45km", 2: "0.75km", 3: "1.0km", 4: "3.0km", 5: "4.3km", 6: "4.9km", 7:"13km", 8: "25km", 9: "36km~"},
@@ -257,5 +266,9 @@ export default {
 
 .mr-2 {
     margin-right: 8px; 
+}
+
+.sunspot-image {
+  background-color: black;
 }
 </style>

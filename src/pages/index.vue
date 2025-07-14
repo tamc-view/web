@@ -14,7 +14,7 @@ import EqStatus from '@/components/top/eqStatus.vue';
 import Main_body from '@/components/top/main_body.vue';
 import Main_grapgh from '@/components/top/main_grapgh.vue';
 import Main_link from '@/components/top/main_link.vue';
-import MeteorGrapgh from '@/components/visibility/meteorGrapgh.vue';
+import MeteorGrapgh from '@/components/top/meteorGrapgh.vue';
 
   //
 </script>

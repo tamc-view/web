@@ -71,6 +71,8 @@ export default {
         const labels = this.meteor_count[0].map(entry => entry[0]); 
         const toyokawaValues = this.meteor_count[0].map(entry => entry[1]);
         const otsuValues = this.meteor_count[1].map(entry => entry[1]);
+        
+        const mobileScreen = window.innerWidth <= 450;
 
         const ctx = canvas.getContext('2d');
         this.chart = new Chart(ctx, {
@@ -94,12 +96,30 @@ export default {
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: mobileScreen ? 5/3 : 6/1,
+            plugins: {
+              legend: {
+                display: !mobileScreen,
+              },
+            },
             scales: {
               y: {
                 min: 0,
                 max: 100,
                 beginAtZero: false,
+                font: {
+                  size: mobileScreen ? 10 : 12,
+                },
+              },
+              x: {
+                ticks: {
+                  display: true,
+                  maxTicksLimit: mobileScreen ? 10 : 30,
+                  font: {
+                    size: mobileScreen ? 10 : 12,
+                  },
+                },
               },
             },
           },
@@ -135,7 +155,5 @@ export default {
 
 .bar-chart {
   width: 100%;
-  height: 15vw;
-  max-height: 15vw;
 }
 </style>

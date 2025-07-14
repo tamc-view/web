@@ -13,7 +13,7 @@
                     <v-img :src="latestMedias[index]" cover style="width: 100%; height: auto;"></v-img>
                     <v-card-title class="flex-column align-start white-text">
                         <div class="text-h4 mb-2" style="white-space: pre-line;">視程距離: {{ visDis[latestResult[index]] }}</div>
-                        <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
+                        <div class="text-h5 font-weight-regular white-text mb-2" style="white-space: pre-line;">
                             {{ observedTimes[index] }}
                         </div>
                         <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">

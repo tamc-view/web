@@ -197,7 +197,7 @@ export default {
   display: block; /* インラインマージンを回避 */
   width: 100% !important; /* コンテナ幅にフィット */
   height: 500px !important; /* 元画像の高さを維持 */
-  object-fit: cover !important; /* コンテナにフィット */
+  object-fit: contain !important; /* コンテナにフィット */
   object-position: center !important; /* 画像の中心をコンテナの中心に */
   position: absolute !important;
   top: 50% !important; /* コンテナの垂直中央 */
