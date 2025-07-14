@@ -21,7 +21,7 @@
                                     </v-icon>
                                     {{ meteorologyData.types[index] }}: {{ meteorologyData.results[index] }}
                                 </div>
-                                <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
+                                <div class="text-h5 font-weight-regular white-text mb-2" style="white-space: pre-line;">
                                     {{ meteorologyData.times[index] }}
                                 </div>
                                 <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
@@ -65,7 +65,7 @@
                                         <v-icon class="mr-2" size="90">mdi-white-balance-sunny</v-icon>
                                         黒点面積： {{ astronomyData.results[index] }} pixel
                                     </div>
-                                    <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
+                                    <div class="text-h5 font-weight-regular white-text mb-2" style="white-space: pre-line;">
                                         観測日: {{ astronomyData.times[index] }}
                                     </div>
                                 </template>
