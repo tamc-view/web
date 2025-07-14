@@ -13,24 +13,24 @@
             <!-- 元画像 -->
             <div class="image-container">
               <div class="text-h6 text-center mb-2">元画像</div>
-              <v-img
-                :src="latestSunImage"
-                :aspect-ratio="4/3"
-                contain
-                class="rounded-lg"
-                style="width: 100%; height: 500px;" 
-              ></v-img>
+              <div class="crop-container">
+                <img
+                  :src="latestSunImage"
+                  class="cropped-image"
+                  alt="Original Sun Image"
+                >
+              </div>
             </div>
             <!-- 検出画像 -->
             <div class="image-container">
               <div class="text-h6 text-center mb-2">検出画像</div>
-              <v-img
-                :src="contourSunImage"
-                :aspect-ratio="4/3"
-                contain
-                class="rounded-lg"
-                style="width: 100%; height: 500px;" 
-              ></v-img>
+              <div class="crop-container">
+                <img
+                  :src="contourSunImage"
+                  class="cropped-image"
+                  alt="Contour Sun Image"
+                >
+              </div>
             </div>
           </div>
           <!-- 最新観測日と黒点面積 -->
@@ -186,5 +186,21 @@ export default {
 .text-h6 {
   font-size: 1.5rem; /* 文字サイズを大きく */
   font-weight: bold;
+}
+.crop-container {
+  width: 100%;
+  height: 500px; /* 元の高さ500pxの60%（上下1/5カット） */
+  overflow: hidden !important; /* 確実にオーバーフローを隠す */
+  position: relative;
+}
+.cropped-image {
+  display: block; /* インラインマージンを回避 */
+  width: 100% !important; /* コンテナ幅にフィット */
+  height: 500px !important; /* 元画像の高さを維持 */
+  object-fit: cover !important; /* コンテナにフィット */
+  object-position: center !important; /* 画像の中心をコンテナの中心に */
+  position: absolute !important;
+  top: 50% !important; /* コンテナの垂直中央 */
+  transform: translateY(-50%) !important; /* 画像の中心をコンテナの中心に揃える */
 }
 </style>

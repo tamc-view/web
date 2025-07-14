@@ -64,6 +64,8 @@ export default {
         const labels = data.map(entry => entry[0]);
         const values = data.map(entry => entry[1]);
 
+        const mobileScreen = window.innerWidth <= 450;
+
         const ctx = canvas.getContext('2d');
         this.charts[index] = new Chart(ctx, {
           type: 'bar',
@@ -78,12 +80,34 @@ export default {
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: mobileScreen ? 5/2 : 6/1,
+            plugins: {
+              legend: {
+                display: !mobileScreen,
+              }
+            },
             scales: {
               y: {
                 min: 0,
                 max: 100,
-                beginAtZero: false
+                beginAtZero: false,
+                // ticks: {
+                //   display: !mobileScreen,
+                // }
+                font: {
+                  size: mobileScreen ? 10 : 12
+                }
+              },
+              x: {
+                ticks: {
+                  display: true,
+                  maxTicksLimit: mobileScreen ? 10 : 30,
+                  Rotation: 0,
+                  font : {
+                    size: mobileScreen ? 10 : 12
+                  }
+                }
               }
             }
           }
@@ -121,8 +145,6 @@ export default {
 
 .bar-chart {
     width: 100%;
-    height: 15vw;
-    max-height: 15vw;
 }
 </style>
   

@@ -9,7 +9,7 @@
       <v-col cols="12" md="4" class="cross-item center">
         <div class="iframe-wrapper">
           <iframe
-            :src="'https://youtube.com/embed/PALTYGP3Ivs?autoplay=1'"
+            :src="'https://www.youtube.com/embed/FHuuS9iOTYU?autoplay=1'"
             frameborder="0"
             scrolling="no"
             allowfullscreen

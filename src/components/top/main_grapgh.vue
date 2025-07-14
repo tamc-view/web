@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios';
-import Chart from 'chart.js/auto';
+import Chart, { Legend, plugins, Ticks } from 'chart.js/auto';
 
 export default {
   name: 'MainGraph',
@@ -78,6 +78,8 @@ export default {
       const labels = data.map(entry => entry[0]);
       const values = data.map(entry => entry[1]);
 
+      const mobileScreen = window.innerWidth <= 450;
+
       const chartData = {
         labels: labels,
         datasets: [{
@@ -89,13 +91,34 @@ export default {
       };
 
       const options = {
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
+        aspectRatio: mobileScreen ? 5/2 : 2/1,
         responsive: true,
+        plugins: {
+          legend: {
+            display: !mobileScreen
+          }
+        },
         scales: {
+          x: {
+            ticks: {
+              display: true,
+              maxTicksLimit: mobileScreen ? 5 : 8, // 450以下の時3つまでx軸表示
+              Rotaion: 0,
+              font: {
+                size: mobileScreen ? 10 : 12
+              }
+            }
+          },
           y: {
             min: this.yMinValues[index],
             max: this.yMaxValues[index],
-            beginAtZero: false
+            beginAtZero: false,
+            ticks: {
+              font: {
+                size: mobileScreen ? 10 : 12
+              }
+            }
           }
         }
       };
@@ -134,8 +157,5 @@ export default {
 
 .line-chart {
   width: 100%;
-  height: 15vw;
-  max-height: 15vw;
 }
 </style>
-
