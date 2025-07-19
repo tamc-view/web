@@ -1,51 +1,38 @@
 <template>
   <div>
     <v-container class="mx-auto d-flex align-center justify-start overflow-visible">
-      <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+      <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
         流星電波観測ライブ
       </div>
     </v-container>
     <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
       <v-row>
-        <v-col>
-          <v-row>
-            <v-card class="sharp-card" outlined>
-              <v-img
-                :width="700"
-                :src="ToyokawalatestImage"
-                cover
-                :aspect-ratio="629/400"
-              ></v-img>
-              <v-card-title class="flex-column align-start">
-                <div class="text-h4 mb-2">豊川HRO</div>
-                <div class="text-h6 font-weight-regular text-grey">{{ ToyokawalatestTime }}</div>
-              </v-card-title>
-              <v-divider class="mx-4"></v-divider>
-            </v-card>
-          </v-row>
-        </v-col>
-        <v-col>
-          <v-row>
-            <v-card class="sharp-card" outlined>
-              <v-img
-                :width="700"
-                :src="OtsulatestImage"
-                cover
-                :aspect-ratio="629/400"
-              ></v-img>
-              <v-card-title class="flex-column align-start">
-                <div class="text-h4 mb-2">大津HRO</div>
-                <div class="text-h6 font-weight-regular text-grey">{{ OtsulatestTime }}</div>
-              </v-card-title>
-              <v-divider class="mx-4"></v-divider>
-            </v-card>
-          </v-row>
+        <v-col v-for="(item, index) in 2" :key="index" cols="12" md="6">
+          <v-card class="sharp-card" outlined>
+            <v-img
+              :src="LiveImages[index]"
+              cover
+              :aspect-ratio="16/9"
+            ></v-img>
+            <v-card-title class="flex-column align-start">
+              <div class="text-h4 mb-2">
+                {{ ['豊川HRO', '大津HRO'][index] }}
+              </div>
+              <div class="text-h6 font-weight-regular text-grey" v-if="index === 0">
+                {{ToyokawalatestTime}}
+              </div>
+              <div class="text-h6 font-weight-regular text-grey" v-if="index === 1">
+                {{OtsulatestTime}}
+              </div>
+            </v-card-title>
+            <v-divider class="mx-4"></v-divider>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
 
     <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-      <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+      <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
         最新の検出流星
       </div>
     </v-container>
@@ -97,6 +84,7 @@ export default {
       OtsulatestImage: '',
       ToyokawalatestTime: '',
       OtsulatestTime: '',
+      LiveImages: [],
       ToyokawalatestMeteorImages: [],
       OtsulatestMeteorImages: [],
       Toyokawa_meteor_logs: [],
@@ -123,6 +111,10 @@ export default {
 
         this.ToyokawalatestImage = ToyokawaimageUrl1;
         this.OtsulatestImage = OtsuimageUrl1;
+        this.LiveImages = [
+          ToyokawaimageUrl1,
+          OtsuimageUrl1
+        ]
         this.ToyokawalatestMeteorImages = [
           ToyokawaMeteorimageUrl1,
           ToyokawaMeteorimageUrl2,

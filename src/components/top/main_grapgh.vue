@@ -1,6 +1,6 @@
 <template>
   <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-    <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+    <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
       現在の気象データ
     </div>
   </v-container>
@@ -61,7 +61,7 @@ export default {
         this.yMinValues[index] = minValue;
         this.yMaxValues[index] = maxValue;
 
-        let label = ['気温', '湿度', '気圧'][index];
+        let label = ['気温（℃）', '湿度（％）', '気圧（hPa）'][index];
         this.drawChart(index, data, label);
       } catch (error) {
         console.error("Error fetching data:", error);

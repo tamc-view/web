@@ -1,7 +1,7 @@
 <template>
     <div class="equipments">
         <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-            <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+            <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
               観測装置使用状況
             </div>
         </v-container>

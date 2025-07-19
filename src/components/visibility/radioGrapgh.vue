@@ -1,20 +1,24 @@
 <template>
-  <div>
-    <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-      <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
-        検出した流星（ラジオ）
-      </div>
-    </v-container>
-    <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-      <v-row class="d-flex" style="width: 100%;">
-        <v-col cols="12">
-          <v-card flat class="graph-card">
-            <canvas id="barChart" class="bar-chart"></canvas>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+  <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
+    <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+      1日に検出した流星数
+    </div>
+  </v-container>
+  <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
+    <v-row class="d-flex" style="width: 100%;">
+      <v-col v-for="(endpoint, index) in endpoints" :key="index" cols="12" md="6">
+        <v-card flat class="graph-card">
+          <v-card-title class="text-h6 font-weight-bold pb-0 d-flex align-center justify-center">
+            <v-icon class="mr-2" size="large">
+              {{ ['mdi-radio-tower', 'mdi-radio-tower'][index] }}
+            </v-icon>
+            {{ ['電波(豊川)', '電波(大津)'][index] }}
+          </v-card-title>
+          <canvas :id="'barChart' + index" class="bar-chart"></canvas>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -22,7 +26,7 @@ import axios from 'axios';
 import Chart from 'chart.js/auto';
 
 export default {
-  name: 'MeteorRadioGraph',
+  name: 'MeteorGraph',
   props: {
     sidebarOpen: { type: Boolean, default: false },
     endpoints: {
@@ -35,114 +39,113 @@ export default {
   },
   data() {
     return {
-      meteor_count: [[], []], // Toyokawa と Otsu のデータを格納
-      meteor_barColors: ['#FFC800', '#6495ED'], // Toyokawa: 黄色, Otsu: 青
-      meteor_labels: ["1日当たりの流星数 (豊川)", "1日当たりの流星数 (大津)"],
-      chart: null,
+      lineColors: ['rgba(255, 99, 132, 1)', '#FFC800', '#6495ED'],
+      yMinValues: [0, 0],
+      yMaxValues: [100, 100],
       interval: null,
     };
   },
   methods: {
-    async fetchData() {
+    async fetchData(endpoint, index) {
       try {
-        const [toyokawaResponse, otsuResponse] = await Promise.all([
-          axios.get(this.endpoints[0]),
-          axios.get(this.endpoints[1]),
-        ]);
-        this.meteor_count[0] = toyokawaResponse.data;
-        this.meteor_count[1] = otsuResponse.data;
-        this.drawBarChart();
+        const response = await axios.get(endpoint);
+        const data = response.data;
+        console.log(`Data for ${endpoint}:`, data);
+        const values = data.map(entry => entry[1]);
+        const minValue = Math.min(...values);
+        const maxValue = Math.max(...values);
+
+        this.yMinValues[index] = minValue;
+        this.yMaxValues[index] = maxValue;
+
+        const label = ['1日当たりの流星数 (豊川)', '1日当たりの流星数 (大津)'][index];
+        this.drawBarChart(index, data, label);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error(`Error fetching data from ${endpoint}:`, error);
       }
     },
-    drawBarChart() {
+    drawBarChart(index, data, label) {
       this.$nextTick(() => {
-        const canvas = document.getElementById('barChart');
+        const canvas = document.getElementById('barChart' + index);
         if (!canvas) {
-          console.error("Canvas element not found");
+          console.error(`Canvas not found for index ${index}`);
           return;
         }
 
-        if (this.chart) {
-          this.chart.destroy();
-        }
+        console.log(`Drawing chart for index ${index}`);
+        Chart.getChart(canvas)?.destroy();
 
-        const labels = this.meteor_count[0].map(entry => entry[0]); 
-        const toyokawaValues = this.meteor_count[0].map(entry => entry[1]);
-        const otsuValues = this.meteor_count[1].map(entry => entry[1]);
-        
+        const labels = data.map(entry => entry[0]);
+        const values = data.map(entry => entry[1]);
+
         const mobileScreen = window.innerWidth <= 450;
 
-        const ctx = canvas.getContext('2d');
-        this.chart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: this.meteor_labels[0],
-                data: toyokawaValues,
-                backgroundColor: this.meteor_barColors[0],
-                borderWidth: 1,
-              },
-              {
-                label: this.meteor_labels[1],
-                data: otsuValues,
-                backgroundColor: this.meteor_barColors[1],
-                borderWidth: 1,
-              },
-            ],
+        const chartData = {
+          labels,
+          datasets: [{
+            label,
+            data: values,
+            borderColor: this.lineColors[index],
+            backgroundColor: this.lineColors[index],
+            fill: false
+          }]
+        };
+
+        const options = {
+          maintainAspectRatio: true,
+          aspectRatio: mobileScreen ? 5 / 2 : 2 / 1,
+          responsive: true,
+          plugins: {
+            legend: {
+              display: !mobileScreen
+            }
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: mobileScreen ? 5/3 : 6/1,
-            plugins: {
-              legend: {
-                display: !mobileScreen,
-              },
-            },
-            scales: {
-              y: {
-                min: 0,
-                max: 100,
-                beginAtZero: false,
+          scales: {
+            x: {
+              ticks: {
+                display: true,
+                maxTicksLimit: mobileScreen ? 5 : 8,
+                rotation: 0,  // corrected spelling
                 font: {
-                  size: mobileScreen ? 10 : 12,
-                },
-              },
-              x: {
-                ticks: {
-                  display: true,
-                  maxTicksLimit: mobileScreen ? 10 : 30,
-                  font: {
-                    size: mobileScreen ? 10 : 12,
-                  },
-                },
-              },
+                  size: mobileScreen ? 10 : 12
+                }
+              }
             },
-          },
+            y: {
+              min: this.yMinValues[index],
+              max: this.yMaxValues[index],
+              beginAtZero: false,
+              ticks: {
+                font: {
+                  size: mobileScreen ? 10 : 12
+                }
+              }
+            }
+          }
+        };
+
+        new Chart(canvas.getContext('2d'), {
+          type: 'bar',
+          data: chartData,
+          options
         });
       });
     },
-    initializeChart() {
-      this.fetchData();
-    },
-  },
-  mounted() {
-    this.interval = setInterval(() => {
-      this.initializeChart();
-    }, 600000); 
-
-    this.initializeChart();
-  },
-  beforeUnmount() {
-    clearInterval(this.interval);
-    if (this.chart) {
-      this.chart.destroy();
+    initializeCharts() {
+      for (let i = 0; i < this.endpoints.length; i++) {
+        this.fetchData(this.endpoints[i], i);
+      }
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.initializeCharts();
+      this.interval = setInterval(() => this.initializeCharts(), 600000); // 10 minutes
+    });
+  },
+  beforeUnmount() {
+    if (this.interval) clearInterval(this.interval);
+  }
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <v-container class="mx-auto d-flex align-center justify-start overflow-visible">
-    <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+    <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
       流星ビデオ観測ライブ（昼間は観測停止）
     </div>
   </v-container>
@@ -20,7 +20,7 @@
     </v-col>
   </v-row>
   <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-    <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+    <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
       最新の検出流星
     </div>
   </v-container>

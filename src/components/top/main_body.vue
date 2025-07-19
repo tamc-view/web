@@ -2,7 +2,7 @@
     <div class="mainBody">
         <!-- Meteorology セクション -->
         <v-container class="mx-auto overflow-visible">
-            <div class="category-title text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+            <div class="category-title text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
                 気象 (Meteorology)
             </div>
             <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
@@ -36,7 +36,7 @@
         
         <!-- Astronomy セクション -->
         <v-container class="mx-auto overflow-visible">
-            <div class="category-title text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+            <div class="category-title text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
                 天文 (Astronomy)
             </div>
             <v-container class="mx-auto d-flex align-center justify-center overflow-visible">

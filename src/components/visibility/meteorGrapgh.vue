@@ -1,18 +1,24 @@
 <template>
-    <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-      <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
-        検出した流星
-      </div>
-    </v-container>
-    <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-      <v-row class="d-flex" style="width: 100%;">
-        <v-col v-for="(endpoint, index) in endpoints" :key="index" cols="12">
-          <v-card flat class="graph-card">
-            <canvas :id="'barChart' + index" class="bar-chart"></canvas>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
+    <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+      1晩に検出した流星数
+    </div>
+  </v-container>
+  <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
+    <v-row class="d-flex" style="width: 100%;">
+      <v-col v-for="(endpoint, index) in endpoints" :key="index" cols="12" md="12">
+        <v-card flat class="graph-card">
+          <v-card-title class="text-h6 font-weight-bold pb-0 d-flex align-center justify-center">
+            <v-icon class="mr-2" size="large">
+              {{ ['mdi-meteor'][index] }}
+            </v-icon>
+            {{ ['ビデオ'][index] }}
+          </v-card-title>
+          <canvas :id="'barChart' + index" class="bar-chart"></canvas>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
   
 <script>
@@ -20,22 +26,21 @@ import axios from 'axios';
 import Chart from 'chart.js/auto';
   
 export default {
-  name: 'MainGraph',
+  name: 'MeteorGraph',
   props: {
     sidebarOpen: { type: Boolean, default: false },
     endpoints: {
       type: Array,
       default: () => [
-        "https://toms-server.tail2925.ts.net/Meteor_count",
-      ]
-    }
+        "https://toms-server.tail2925.ts.net/Meteor_count"
+      ],
+    },
   },
   data() {
     return {
-      meteor_count: [],
-      meteor_barColor: '#FFC800', 
-      meteor_label: "1晩あたりの流星数",
-      charts: [],
+      lineColors: ['rgba(255, 99, 132, 1)'],
+      yMinValues: [0],
+      yMaxValues: [100],
       interval: null,
     };
   },
@@ -43,108 +48,114 @@ export default {
     async fetchData(endpoint, index) {
       try {
         const response = await axios.get(endpoint);
-        this.meteor_count[index] = response.data;
-        this.drawBarChart(this.meteor_count[index], this.meteor_label, index);
+        const data = response.data;
+        console.log(`Data for ${endpoint}:`, data);
+        const values = data.map(entry => entry[1]);
+        const minValue = Math.min(...values);
+        const maxValue = Math.max(...values);
+
+        this.yMinValues[index] = minValue;
+        this.yMaxValues[index] = maxValue;
+
+        const label = ['1晩あたりの流星数'][index];
+        this.drawBarChart(index, data, label);
       } catch (error) {
         console.error(`Error fetching data from ${endpoint}:`, error);
       }
     },
-    drawBarChart(data, label, index) {
+    drawBarChart(index, data, label) {
       this.$nextTick(() => {
-        const canvas = document.getElementById(`barChart${index}`);
+        const canvas = document.getElementById('barChart' + index);
         if (!canvas) {
-          console.error(`Canvas element not found for index ${index}`);
+          console.error(`Canvas not found for index ${index}`);
           return;
         }
 
-        if (this.charts[index]) {
-          this.charts[index].destroy();
-        }
+        console.log(`Drawing chart for index ${index}`);
+        Chart.getChart(canvas)?.destroy();
 
         const labels = data.map(entry => entry[0]);
         const values = data.map(entry => entry[1]);
 
         const mobileScreen = window.innerWidth <= 450;
 
-        const ctx = canvas.getContext('2d');
-        this.charts[index] = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: label,
-              data: values,
-              backgroundColor: this.meteor_barColor,
-              borderWidth: 1
-            }]
+        const chartData = {
+          labels,
+          datasets: [{
+            label,
+            data: values,
+            borderColor: this.lineColors[index],
+            backgroundColor: this.lineColors[index],
+            fill: false
+          }]
+        };
+
+        const options = {
+          maintainAspectRatio: true,
+          aspectRatio: mobileScreen ? 5 / 2 : 2 / 1,
+          responsive: true,
+          plugins: {
+            legend: {
+              display: !mobileScreen
+            }
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: mobileScreen ? 5/2 : 6/1,
-            plugins: {
-              legend: {
-                display: !mobileScreen,
-              }
-            },
-            scales: {
-              y: {
-                min: 0,
-                max: 100,
-                beginAtZero: false,
-                // ticks: {
-                //   display: !mobileScreen,
-                // }
+          scales: {
+            x: {
+              ticks: {
+                display: true,
+                maxTicksLimit: mobileScreen ? 5 : 8,
+                rotation: 0,  // corrected spelling
                 font: {
                   size: mobileScreen ? 10 : 12
                 }
-              },
-              x: {
-                ticks: {
-                  display: true,
-                  maxTicksLimit: mobileScreen ? 10 : 30,
-                  Rotation: 0,
-                  font : {
-                    size: mobileScreen ? 10 : 12
-                  }
+              }
+            },
+            y: {
+              min: this.yMinValues[index],
+              max: this.yMaxValues[index],
+              beginAtZero: false,
+              ticks: {
+                font: {
+                  size: mobileScreen ? 10 : 12
                 }
               }
             }
           }
+        };
+
+        new Chart(canvas.getContext('2d'), {
+          type: 'bar',
+          data: chartData,
+          options
         });
       });
     },
     initializeCharts() {
-      this.endpoints.forEach((endpoint, index) => {
-        this.fetchData(endpoint, index);
-      });
+      for (let i = 0; i < this.endpoints.length; i++) {
+        this.fetchData(this.endpoints[i], i);
+      }
     }
   },
   mounted() {
-    this.interval = setInterval(() => {
+    this.$nextTick(() => {
       this.initializeCharts();
-    }, 600000);
-
-    this.initializeCharts();
+      this.interval = setInterval(() => this.initializeCharts(), 600000); // 10 minutes
+    });
   },
   beforeUnmount() {
-    clearInterval(this.interval);
-    this.charts.forEach(chart => {
-      if (chart) chart.destroy();
-    });
+    if (this.interval) clearInterval(this.interval);
   }
 };
 </script>
-  
+
 <style scoped>
 .graph-card {
-    border-radius: 0 !important;
-    background-color: white;
-    border: 1px solid #212121;
+  border-radius: 0 !important;
+  background-color: white;
+  border: 1px solid #212121;
 }
 
 .bar-chart {
-    width: 100%;
+  width: 100%;
 }
 </style>
-  

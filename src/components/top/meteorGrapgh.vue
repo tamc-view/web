@@ -1,6 +1,6 @@
 <template>
   <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-    <div class="text-h5 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
+    <div class="text-h4 pa-3" style="font-weight: bold; border-bottom: 2px solid #000;">
       1日に検出した流星数
     </div>
   </v-container>
