@@ -6,8 +6,8 @@
       </div>
     </v-container>
     <v-container class="mx-auto d-flex align-center justify-center overflow-visible">
-      <v-row>
-        <v-col>
+      <v-row class="d-flex" style="width: 100%;">
+        <v-col cols="12"  md="6" >
           <v-row>
             <v-card class="sharp-card" outlined>
               <v-img
@@ -23,7 +23,7 @@
             </v-card>
           </v-row>
         </v-col>
-        <v-col>
+        <v-col cols="12"  md="6">
           <v-row>
             <v-card class="sharp-card" outlined>
               <v-img
