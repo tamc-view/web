@@ -62,7 +62,7 @@
                                 <template v-if="astronomyData.types[index] === '流星'">
                                     <div class="text-h4 mb-2 d-flex align-center" style="white-space: pre-line;">
                                         <v-icon class="mr-2" size="90">mdi-meteor</v-icon>
-                                        流星： {{ getDirection(astronomyData.results[index]) }}
+                                        最新の流星： {{ getDirection(astronomyData.results[index]) }}
                                     </div>
                                     <div class="text-h5 font-weight-regular white-text mb-2" style="white-space: pre-line;">
                                         {{ getTime(astronomyData.results[index]) }}
@@ -72,10 +72,10 @@
                                 <template v-else-if="astronomyData.types[index] === '黒点'">
                                     <div class="text-h4 mb-2 d-flex align-center" style="white-space: pre-line;">
                                         <v-icon class="mr-2" size="90">mdi-white-balance-sunny</v-icon>
-                                        黒点面積： {{ astronomyData.results[index] }} pixel
+                                        最新の太陽黒点： {{ astronomyData.times[index] }}
                                     </div>
                                     <div class="text-h5 font-weight-regular white-text mb-2" style="white-space: pre-line;">
-                                        {{ astronomyData.times[index] }}
+                                        黒点面積 {{ astronomyData.results[index] }} pixel
                                     </div>
                                 </template>
                                 <div class="text-h6 font-weight-regular text-grey" style="white-space: pre-line;">
@@ -99,7 +99,7 @@ export default {
         return {
             meteorologyData: {
                 medias: [],
-                types: ["視程距離", "富士山"],
+                types: ["立川高校から見える距離（視程）", "富士山の有無"],
                 icons: ["mdi-eye-outline", "mdi-image-filter-hdr-outline"],
                 results: [],
                 times: [],
